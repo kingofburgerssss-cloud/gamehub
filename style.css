@@ -53,4 +53,13 @@ h1 {
   border-color: #ff0;
   text-shadow: 0 0 20px #ff0;
   transform: scale(1.05);
+
+  canvas#bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1; /* behind everything */
 }
+
+}
+
