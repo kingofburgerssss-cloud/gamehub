@@ -26,7 +26,7 @@ class Particle {
     if(this.y > canvas.height) this.y = 0;
   }
   draw() {
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.fillStyle = 'rgba(255,255,255,0.2)'; // subtle 20% opacity
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
     ctx.fill();
@@ -35,12 +35,12 @@ class Particle {
 
 function initParticles(num) {
   particles = [];
-  for(let i=0;i<num;i++) particles.push(new Particle());
+  for(let i = 0; i < num; i++) particles.push(new Particle());
 }
-initParticles(80);
+initParticles(120);
 
 function animate() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   particles.forEach(p => { p.update(); p.draw(); });
   requestAnimationFrame(animate);
 }
