@@ -4,7 +4,8 @@ body {
   background: #111;
   color: #eee;
   text-align: center;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto; /* allow scroll if needed */
   position: relative;
 }
 
@@ -13,46 +14,4 @@ canvas#bg {
   top: 0;
   left: 0;
   z-index: -1; /* behind everything */
-}
-
-h1 {
-  margin: 40px 0;
-  font-size: 3em;
-  color: #ff4d4d;
-  text-shadow: 0 0 10px #ff4d4d, 0 0 20px #ff4d4d, 0 0 40px #ff4d4d;
-  animation: glow 2s infinite alternate;
-}
-
-.games {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  z-index: 1;
-  position: relative;
-}
-
-.game-btn {
-  padding: 15px 30px;
-  font-size: 1.5em;
-  color: #0f0;
-  text-decoration: none;
-  border: 2px solid #0f0;
-  border-radius: 10px;
-  transition: 0.3s;
-  text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
-  box-shadow: 0 0 10px #0f0, 0 0 20px #0f0 inset;
-}
-
-.game-btn:hover {
-  color: #ff0;
-  border-color: #ff0;
-  text-shadow: 0 0 20px #ff0, 0 0 40px #ff0;
-  box-shadow: 0 0 20px #ff0, 0 0 40px #ff0 inset;
-  transform: scale(1.05);
-}
-
-@keyframes glow {
-  from { text-shadow: 0 0 10px #ff4d4d, 0 0 20px #ff4d4d, 0 0 40px #ff4d4d; }
-  to   { text-shadow: 0 0 20px #ff4d4d, 0 0 40px #ff4d4d, 0 0 60px #ff4d4d; }
 }
