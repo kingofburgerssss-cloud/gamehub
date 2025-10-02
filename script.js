@@ -1,62 +1,76 @@
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: 'Segoe UI', sans-serif;
-  background: #111;
-  overflow: hidden;
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let buttons = [];
+
+window.addEventListener('DOMContentLoaded', () => {
+  buttons = Array.from(document.querySelectorAll('.game-btn'));
+});
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+class Particle {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 5 + 2;
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.speedY = (Math.random() - 0.5) * 0.3;
+    this.baseOpacity = Math.random() * 0.5 + 0.2;
+    this.opacity = this.baseOpacity;
+    this.opacityDir = Math.random() > 0.5 ? 1 : -1;
+  }
+
+  update() {
+    // move particle
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if(this.x < 0) this.x = canvas.width;
+    if(this.x > canvas.width) this.x = 0;
+    if(this.y < 0) this.y = canvas.height;
+    if(this.y > canvas.height) this.y = 0;
+
+    // pulse opacity
+    this.opacity += 0.005 * this.opacityDir;
+    if(this.opacity > 0.8) this.opacityDir = -1;
+    if(this.opacity < 0.2) this.opacityDir = 1;
+
+    // hover reaction
+    buttons.forEach(btn => {
+      const rect = btn.getBoundingClientRect();
+      const dx = this.x - (rect.left + rect.width / 2);
+      const dy = this.y - (rect.top + rect.height / 2);
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if(dist < Math.max(rect.width, rect.height)/1.5) {
+        this.x += dx / dist * 2;
+        this.y += dy / dist * 2;
+        this.opacity = Math.min(1, this.opacity + 0.05);
+      }
+    });
+  }
+
+  draw() {
+    ctx.fillStyle = `rgba(255,255,255,${this.opacity})`;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+    ctx.fill();
+  }
 }
 
-canvas#bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
+function initParticles(num) {
+  particles = [];
+  for(let i = 0; i < num; i++) particles.push(new Particle());
 }
+initParticles(200);
 
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: #eee;
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animate);
 }
-
-h1 {
-  font-size: 3em;
-  margin-bottom: 50px;
-  color: #ff4d4d;
-  text-shadow: 0 0 10px #ff4d4d, 0 0 20px #ff4d4d, 0 0 40px #ff4d4d;
-}
-
-.games {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
-
-.game-btn {
-  padding: 20px 40px;
-  font-size: 1.8em;
-  text-decoration: none;
-  color: #0f0;
-  border: 3px solid #0f0;
-  border-radius: 15px;
-  text-shadow: 0 0 5px #0f0;
-  transition: all 0.3s ease;
-}
-
-.game-btn:hover {
-  color: #ff0;
-  border-color: #ff0;
-  text-shadow: 0 0 20px #ff0;
-  transform: scale(1.05);
-}
-
-@media (max-width: 600px) {
-  .game-btn { width: 80%; text-align: center; }
-}
+animate();
