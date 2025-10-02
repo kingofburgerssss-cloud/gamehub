@@ -1,4 +1,3 @@
-// particle background
 const canvas = document.getElementById('bg');
 const ctx = canvas.getContext('2d');
 let particles = [];
@@ -41,7 +40,7 @@ function initParticles(num) {
 initParticles(100);
 
 function animate() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.clearRect(0,0,canvas.width,canvas.height); // clear background only
   particles.forEach(p => { p.update(); p.draw(); });
   requestAnimationFrame(animate);
 }
