@@ -1,20 +1,150 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nial.fun</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>nial.fun gamehub</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    h1 {
+      margin: 20px 0;
+      text-shadow: 0 0 10px #ff0000;
+    }
+    .game-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      z-index: 1;
+      position: relative;
+    }
+    .game {
+      background: #222;
+      border-radius: 12px;
+      padding: 10px;
+      width: 200px;
+      text-align: center;
+      transition: 0.2s;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255,0,0,0.3);
+    }
+    .game:hover {
+      background: #333;
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255,0,0,0.5);
+    }
+    iframe {
+      margin-top: 20px;
+      width: 90vw;
+      height: 60vh;
+      border: none;
+      border-radius: 12px;
+      display: none;
+      z-index: 1;
+      position: relative;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+  </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
-<div class="container">
-  <h1>🎮 Nial.fun 🎮</h1>
-  <div class="games">
-    <a href="https://kingofburgerssss-cloud.github.io/Basic-Math-Game/" target="_blank" class="game-btn">Math Speed Game</a>
-    <a href="https://peth4r-rgb.github.io/Basic-Incremental-Game/" target="_blank" class="game-btn">Incremental Clicker</a>
+
+<h1>nial.fun gamehub</h1>
+
+<div class="game-list">
+  <div class="game" data-src="https://kingofburgerssss-cloud.github.io/Basic-Math-Game/">
+    <img src="https://kingofburgerssss-cloud.github.io/Basic-Math-Game/thumbnail.png" alt="Math Speed Game">
+    Math Speed Game
+  </div>
+  <div class="game" data-src="https://peth4r-rgb.github.io/Basic-Incremental-Game/">
+    <img src="https://peth4r-rgb.github.io/Basic-Incremental-Game/thumbnail.png" alt="Basic Incremental Game">
+    Basic Incremental Game
   </div>
 </div>
-<script src="script.js"></script>
+
+<iframe id="gameFrame"></iframe>
+
+<canvas id="particles"></canvas>
+
+<script>
+  const games = document.querySelectorAll('.game');
+  const frame = document.getElementById('gameFrame');
+
+  games.forEach(game => {
+    game.addEventListener('click', () => {
+      frame.src = game.dataset.src;
+      frame.style.display = 'block';
+      window.scrollTo({top: frame.offsetTop, behavior: 'smooth'});
+    });
+  });
+
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particlesArray = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 3 + 1;
+      this.speedX = Math.random() * 1 - 0.5;
+      this.speedY = Math.random() * 1 - 0.5;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if(this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+      if(this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+    }
+    draw() {
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function initParticles() {
+    particlesArray = [];
+    for(let i = 0; i < 100; i++) {
+      particlesArray.push(new Particle());
+    }
+  }
+
+  function animateParticles() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particlesArray.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animateParticles);
+  }
+
+  initParticles();
+  animateParticles();
+</script>
+
 </body>
 </html>
