@@ -48,7 +48,11 @@
   .game img {
     width: 100%;
     border-radius: 8px;
-    margin-bottom: 10px;
+    display: block;
+  }
+  /* hide game names */
+  .game span {
+    display: none;
   }
   canvas {
     position: fixed;
@@ -66,12 +70,16 @@
 
 <div class="game-list">
   <div class="game" data-src="https://kingofburgerssss-cloud.github.io/Basic-Math-Game/">
-    <img src="images/mathspeedgame.png" alt="Math Speed Game">
-    Math Speed Game
+    <img src="images/Basicmathgame.png" alt="Math Speed Game">
+    <span>Math Speed Game</span>
   </div>
   <div class="game" data-src="https://peth4r-rgb.github.io/Basic-Incremental-Game/">
-    <img src="images/basicincrementalgame.png" alt="Basic Incremental Game">
-    Basic Incremental Game
+    <img src="images/Basicincrementalgame (3).png" alt="Basic Incremental Game">
+    <span>Basic Incremental Game</span>
+  </div>
+  <div class="game" data-src="https://kingofburgerssss-cloud.github.io/game/">
+    <img src="images/Basictypinggame.png" alt="Basic Typing Game">
+    <span>Basic Typing Game</span>
   </div>
 </div>
 
